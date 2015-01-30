@@ -2,6 +2,16 @@ package boards;
 
 public class TriangleBoard extends GameBoard{
 
+	public TriangleBoard() {
+		gameBoard = new int[][] {
+				{1, 0, 0, 0, 0, 0, 0},
+				{1, 1, 0, 0, 0, 0, 0},
+				{1, 1, 1, 0, 0, 0, 0},
+				{1, 1, 1, 1, 0, 0, 0},
+				{1, 1, 1, 1, 1, 0, 0}
+				};
+	}
+	
 	@Override
 	public int getPegCount() {
 		// TODO Auto-generated method stub

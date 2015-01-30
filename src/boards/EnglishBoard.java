@@ -2,6 +2,18 @@ package boards;
 
 public class EnglishBoard extends GameBoard{
 
+	public EnglishBoard() {
+		gameBoard = new int[][] {
+				{0, 0, 1, 1, 1, 0, 0},
+				{0, 0, 1, 1, 1, 0, 0},
+				{1, 1, 1, 1, 1, 1, 1},
+				{1, 1, 1, 2, 1, 1, 1},
+				{1, 1, 1, 1, 1, 1, 1},
+				{0, 0, 1, 1, 1, 0, 0},
+				{0, 0, 1, 1, 1, 0, 0}
+				};
+	}
+	
 	@Override
 	public int getPegCount() {
 		// TODO Auto-generated method stub

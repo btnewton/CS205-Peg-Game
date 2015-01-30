@@ -1,7 +1,7 @@
 package boards;
 
 public abstract class GameBoard {
-	private int[][] gameBoard;
+	protected int[][] gameBoard;
 
 
 	public abstract int getPegCount();

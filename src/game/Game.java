@@ -53,7 +53,9 @@ public class Game {
 		return true;
 	}
 	
-	
+	/**
+	 * Prints helpful information to the console.
+	 */
 	private void printHelp(){
 		System.out.println("Helpful information");
 	}
