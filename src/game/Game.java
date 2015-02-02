@@ -9,10 +9,21 @@ public class Game {
 	
 	GameBoard board;
 	
+	/**
+	 * The game constructor sets which board is to be used in the new game.
+	 * 
+	 * Boards all extend the GameBoard class and use their own data structures
+	 * and move validation.
+	 * 
+	 * @param board
+	 */
 	public Game(GameBoard board) {
 		this.board = board;
 	}
 	
+	/**
+	 * Play runs the main game loop.
+	 */
 	public void play() {
 		boolean playing = true;
 		
