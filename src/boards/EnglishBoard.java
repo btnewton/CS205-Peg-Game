@@ -28,7 +28,7 @@ public class EnglishBoard extends GameBoard{
 	 */
 	@Override
 	public void drawBoard() {
-		int holeCounter = 0;
+		int holeCounter = 1;
 		
 		for (int row = 0; row < gameBoard.length; row++) {
 			for (int col = 0; col < gameBoard[row].length; col++) {

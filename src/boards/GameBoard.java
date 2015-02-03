@@ -44,7 +44,7 @@ public abstract class GameBoard {
 		
 		for (int row = 0; row < gameBoard.length; row++) {
 			for (int col = 0; col < gameBoard[row].length; col++) {
-				if (gameBoard[col][row] == OCCUPIED_POS)
+				if (gameBoard[row][col] == OCCUPIED_POS)
 					pegCounter++;
 			}	
 		}
@@ -95,6 +95,68 @@ public abstract class GameBoard {
 		System.out.print(draw);
 		
 		return holeCounter;
+	}
+	
+	/**
+	 * Set the position to vacant.
+	 * 
+	 * @param pos	location to empty.
+	 */
+	public void emptyPos(int pos) {
+		setPos(pos, VACANT_POS);
+	}
+	
+	
+	/**
+	 * Set the position to occupied.
+	 * 
+	 * @param pos	location to fill.
+	 */
+	public void fillPos(int pos) {
+		setPos(pos, OCCUPIED_POS);
+	}
+	
+	/**
+	 * Private position setter method that will set an element of the board data structure
+	 * to the specified new value. 
+	 *
+	 * @param pos		relates to number of valid positions in gameBoard.
+	 * @param newType	new value for pos.
+	 */
+	private void setPos(int pos, int newType) {
+		int posCounter = 1;
+		
+		for (int row = 0; row < gameBoard.length; row++) {
+			for (int col = 0; col < gameBoard[row].length; col++) {
+				if (gameBoard[row][col] != INVALID_POS) {
+					if (posCounter == pos) {
+						gameBoard[row][col] = newType;
+						return;
+					}
+					posCounter++;
+				}
+			}	
+		}
+	}
+	
+	/**
+	 * Counts total elements in gameBoard that are not equal to
+	 * INVALID_POS.
+	 * 
+	 * @return count of valid positions.
+	 */
+	public int countTotalPositions() {
+		int posCounter = 0;
+		
+		for (int row = 0; row < gameBoard.length; row++) {
+			for (int col = 0; col < gameBoard[row].length; col++) {
+				if (gameBoard[row][col] != INVALID_POS) {
+					posCounter++;
+				}
+			}	
+		}
+		
+		return posCounter;
 	}
 	
 	// Abstract Methods

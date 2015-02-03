@@ -1,5 +1,7 @@
 package boards;
 
+import java.util.Scanner;
+
 public class TriangleBoard extends GameBoard{
 
 	public TriangleBoard() {
@@ -10,8 +12,35 @@ public class TriangleBoard extends GameBoard{
 				{2, 2, 2, 2, 0},
 				{2, 2, 2, 2, 2}
 				};
+
+		setStartingPosition();
 	}
 
+	/**
+	 * Allows the user to chose which position is empty at the start of the game.
+	 */
+	private void setStartingPosition() {
+		do {
+			Scanner keyboard = new Scanner(System.in); 
+			
+			drawBoard();
+			
+			System.out.println("Please select a position to empty:");
+			
+			String input = keyboard.nextLine();
+			
+			try {
+				int position = Integer.parseInt(input);
+				if (0 < position && position <= countTotalPositions()) {
+					emptyPos(position);
+					return;
+				}
+			} catch (NumberFormatException e) {
+				System.out.println("Invalid position.");
+			}
+		}while(true);
+	}
+	
 	@Override
 	public boolean isValidMove(int initialPosition, int finalPosition) {
 		// TODO Auto-generated method stub
@@ -26,7 +55,7 @@ public class TriangleBoard extends GameBoard{
 	 */
 	@Override
 	public void drawBoard() {
-		int holeCounter = 0;
+		int holeCounter = 1;
 		
 		for (int row = 0; row < gameBoard.length; row++) {
 			drawOffset(row);
