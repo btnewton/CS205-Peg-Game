@@ -176,5 +176,14 @@ public class TriangleBoard extends GameBoard{
 	@Override
 	public void showHelp() {
 		System.out.println("SHOW HELP");
+		System.out.println("GAME COMMANDS AND RULES:");
+		System.out.println("press q to quit.");
+		System.out.println("press h for help.");
+		System.out.println("Welcome to Peg solitare, the goal of the game is to remove all pegs but one");
+		System.out.println("to remove a peg, you must take select a peg, and move that peg over another into");
+		System.out.println("an empty space. Think jumping in checkers. Enter the coordinate of the peg you wish");
+		System.out.println("to move, and then the coordinate of the empty space you wish to move that peg into.");
+		System.out.println("The game is over when there are no longer any moves the player can make, with the");
+		System.out.println("Player winning if there is only one peg remaining at this time.");
 	}
 }
