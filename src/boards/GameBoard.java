@@ -20,6 +20,8 @@ public abstract class GameBoard {
 	 * @param invalid_pos	GFX to represent null space.
 	 * @param vacant_pos	GFX to represent an empty hole.
 	 * @param occupied_pos	GFX to represent an occupied hole.
+	 * 
+	 * @author Brandt
 	 */
 	protected GameBoard(String invalid_pos, String vacant_pos, String occupied_pos) {
 		INVALID_GFX = invalid_pos;
@@ -29,6 +31,8 @@ public abstract class GameBoard {
 	
 	/**
 	 * This constructor uses the default board GFX.
+	 * 
+	 * @author Brandt
 	 */
 	protected GameBoard() {
 		INVALID_GFX = "     ";
@@ -40,6 +44,8 @@ public abstract class GameBoard {
 	 * getPegCount returns the number of pegs that exist in the gameBoard data structure.
 	 * 
 	 * @return count of remaining pegs.
+	 * 
+	 * @author Brandt
 	 */
 	public int getPegCount() {
 		int pegCounter = 0;
@@ -61,6 +67,8 @@ public abstract class GameBoard {
 	 * 
 	 * @param pos	position to test.
 	 * @return 		True if position holds a peg.
+	 * 
+	 * @author Brandt
 	 */
 	public boolean isPeg(Coordinate coordinate) {
 		return gameBoard[coordinate.getRow()][coordinate.getCol()] == OCCUPIED_POS;
@@ -73,6 +81,8 @@ public abstract class GameBoard {
 	 * 
 	 * @param pos	position to test.
 	 * @return 		True if position holds a peg.
+	 * 
+	 * @author Brandt
 	 */
 	public boolean isEmpty(Coordinate coordinate) {
 		return gameBoard[coordinate.getRow()][coordinate.getCol()] == VACANT_POS;
@@ -86,6 +96,8 @@ public abstract class GameBoard {
 	 * @param peg			value of current position.
 	 * @param holeCounter	number of next printed hole.
 	 * @return number of next printed hole.
+	 * 
+	 * @author Brandt
 	 */
 	public int drawPeg(int peg, int holeCounter) {		
 		String draw;
@@ -114,6 +126,8 @@ public abstract class GameBoard {
 	 * Set the position to vacant.
 	 * 
 	 * @param pos	location to empty.
+	 * 
+	 * @author Brandt
 	 */
 	public void emptyPos(Coordinate coordinate) {
 		setPos(coordinate, VACANT_POS);
@@ -123,6 +137,8 @@ public abstract class GameBoard {
 	 * Set the position to occupied.
 	 * 
 	 * @param pos	location to fill.
+	 * 
+	 * @author Brandt
 	 */
 	public void fillPos(Coordinate coordinate) {
 		setPos(coordinate, OCCUPIED_POS);
@@ -134,6 +150,8 @@ public abstract class GameBoard {
 	 *
 	 * @param pos		relates to number of valid positions in gameBoard.
 	 * @param newType	new value for pos.
+	 * 
+	 * @author Brandt
 	 */
 	private void setPos(Coordinate coordinate, int newType) {
 		int row = coordinate.getRow();
@@ -142,6 +160,14 @@ public abstract class GameBoard {
 		gameBoard[row][col] = newType;
 	}
 	
+	/**
+	 * Converts a position to a Coordinate
+	 * 
+	 * @param pos	to be converted
+	 * @return		Coordinate equivalent to pos
+	 * 
+	 * @author Brandt
+	 */
 	public Coordinate getCoordinate(int pos) {
 		int posCounter = 1;
 		
@@ -156,10 +182,20 @@ public abstract class GameBoard {
 			}	
 		}
 		
-		// Postion not found.
+		// Position not found.
 		return null;
 	}
 	
+	/**
+	 * Converts a coordinate to a position.
+	 * 
+	 * Positions equal the peg number for the board.
+	 * 
+	 * @param coordinate	coordinate to convert.
+	 * @return return 		equivalent position of coordinate.
+	 * 
+	 * @author Brandt
+	 */
 	protected int getPos(Coordinate coordinate) {
 		int posCounter = 0;
 		int targetRow = coordinate.getRow();
@@ -181,6 +217,12 @@ public abstract class GameBoard {
 		return -1;
 	}
 	
+	/**
+	 * Checks if coordinate corresponds to a valid position on the board.
+	 * 
+	 * @param coordinate	Coordinate to test.
+	 * @return				True if coordinate is not invalid.
+	 */
 	public boolean isValid(Coordinate coordinate) {
 		return gameBoard[coordinate.getRow()][coordinate.getCol()] != INVALID_POS;
 	}
@@ -190,6 +232,8 @@ public abstract class GameBoard {
 	 * INVALID_POS.
 	 * 
 	 * @return count of valid positions.
+	 * 
+	 * @author Brandt
 	 */
 	public int countTotalPositions() {
 		int posCounter = 0;
@@ -205,6 +249,11 @@ public abstract class GameBoard {
 		return posCounter;
 	}
 	
+	/**
+	 * Prints a break for esthetics. 
+	 * 
+	 * @author Brandt
+	 */
 	public static void drawHR() {
 		System.out.println("\n\n---\n");
 	}
