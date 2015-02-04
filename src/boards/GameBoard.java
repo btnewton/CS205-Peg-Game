@@ -4,7 +4,7 @@ import other.Coordinate;
 
 public abstract class GameBoard {
 	protected int[][] gameBoard;
-	
+
 	// Text to print
 	protected final String INVALID_GFX;
 	protected final String VACANT_GFX;

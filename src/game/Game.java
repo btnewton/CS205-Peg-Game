@@ -116,12 +116,15 @@ public class Game {
 			    
 		// Provide win/loss feedback
 		if(board.getPegCount() == 1){
-		    System.out.println("You Win");
+		    System.out.println("You Win!");
+		    
+		    // Update games won count.
 		    gamesWon++;
 		}else{
-			System.out.println("You LOSE");
+			System.out.println("You lose.");
 		}
 		
+		// Update other stats
 		gamesPlayed++;
 		totalPegsLeft += board.getPegCount();
 		System.out.println("Remaining number of pegs: " + board.getPegCount());
@@ -136,7 +139,7 @@ public class Game {
 			DecimalFormat formatter = new DecimalFormat("##0.00");
 			System.out.println("\nTotal pegs left this session: " + totalPegsLeft);
 			System.out.println("Win Rate: " + formatter.format((( (double) gamesWon / gamesPlayed ) * 100)) + "%");
-			System.out.println("Average Pegs Left: " + formatter.format( (double) totalPegsLeft / gamesPlayed));
+			System.out.println("Average Pegs Left: " + totalPegsLeft / gamesPlayed);
 		}
 	}
 

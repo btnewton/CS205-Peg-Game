@@ -18,7 +18,59 @@ public class EnglishBoard extends GameBoard{
 	
 	@Override
 	public Coordinate isValidMove(Coordinate initialCoordinate, Coordinate finalCoordinate) {
-		// TODO Auto-generated method stub
+		
+		// Initial tests
+		if ( isEmpty(initialCoordinate) )
+			return null;
+		
+		if ( isPeg(finalCoordinate) )
+			return null;
+		
+		// Primary Tests
+		Coordinate skipCoordinate;
+		
+		skipCoordinate = testHorizontal( initialCoordinate, finalCoordinate );
+		
+		if (skipCoordinate == null)
+			skipCoordinate = testVertical( initialCoordinate, finalCoordinate );
+		
+		return skipCoordinate;
+	}
+	
+	private Coordinate testHorizontal(Coordinate initialPos, Coordinate finalPos) {
+		if (initialPos.getRow() == finalPos.getRow()) {
+			Coordinate skipCoordinate = null;
+			
+			// Horizontal attempt
+			if(initialPos.getCol() - finalPos.getCol() == 2){
+				skipCoordinate = new Coordinate( initialPos.getRow(), initialPos.getCol() - 1 );
+			}else if(initialPos.getCol() - finalPos.getCol() == -2){
+				skipCoordinate = new Coordinate( initialPos.getRow(), initialPos.getCol() + 1 );
+			}
+			
+			if ( isPeg( skipCoordinate ) )
+				return skipCoordinate;
+			
+		}
+		return null;
+	}
+	
+	private Coordinate testVertical(Coordinate initialPos, Coordinate finalPos) {
+		if (initialPos.getCol() == finalPos.getCol()) {
+			Coordinate skipCoordinate = null;
+			
+			// Horizontal attempt
+			if ( initialPos.getRow() - finalPos.getRow() == 2 ){
+				skipCoordinate = new Coordinate( initialPos.getRow() - 1, initialPos.getCol() );
+			} else if ( initialPos.getRow() - finalPos.getRow() == -2 ){
+				skipCoordinate = new Coordinate( initialPos.getRow() + 1, initialPos.getCol() );
+			}
+			
+			if ( isPeg( skipCoordinate ) )
+				return skipCoordinate;
+			
+		}
+		
 		return null;
 	}
 
