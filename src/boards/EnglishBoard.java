@@ -1,5 +1,7 @@
 package boards;
 
+import other.Coordinate;
+
 public class EnglishBoard extends GameBoard{
 
 	public EnglishBoard() {
@@ -15,9 +17,9 @@ public class EnglishBoard extends GameBoard{
 	}
 	
 	@Override
-	public boolean isValidMove(int initialPosition, int finalPosition) {
+	public Coordinate isValidMove(Coordinate initialCoordinate, Coordinate finalCoordinate) {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
 	/**
@@ -28,6 +30,8 @@ public class EnglishBoard extends GameBoard{
 	 */
 	@Override
 	public void drawBoard() {
+		drawHR();
+		
 		int holeCounter = 1;
 		
 		for (int row = 0; row < gameBoard.length; row++) {
@@ -38,5 +42,10 @@ public class EnglishBoard extends GameBoard{
 			
 			System.out.print("\n");
 		}
+	}
+	
+	@Override
+	public void showHelp() {
+		System.out.println("SHOW HELP");
 	}
 }

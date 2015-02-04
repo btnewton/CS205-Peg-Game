@@ -1,5 +1,7 @@
 package boards;
 
+import other.Coordinate;
+
 public abstract class GameBoard {
 	protected int[][] gameBoard;
 	
@@ -55,14 +57,25 @@ public abstract class GameBoard {
 	/**
 	 * isPeg determines if the given hole is occupied.
 	 * 
-	 * Note that invalid positions will return False.
+	 * Note that invalid positions will also return False.
 	 * 
 	 * @param pos	position to test.
 	 * @return 		True if position holds a peg.
 	 */
-	public boolean isPeg(int pos) {
-		int rowLength = gameBoard[0].length;
-		return gameBoard[pos/rowLength][pos%rowLength] == OCCUPIED_POS;
+	public boolean isPeg(Coordinate coordinate) {
+		return gameBoard[coordinate.getRow()][coordinate.getCol()] == OCCUPIED_POS;
+	}
+	
+	/**
+	 * isEmpty determines if the given hole is vacant.
+	 * 
+	 * Note that invalid positions will also return False.
+	 * 
+	 * @param pos	position to test.
+	 * @return 		True if position holds a peg.
+	 */
+	public boolean isEmpty(Coordinate coordinate) {
+		return gameBoard[coordinate.getRow()][coordinate.getCol()] == VACANT_POS;
 	}
 
 	/**
@@ -102,18 +115,17 @@ public abstract class GameBoard {
 	 * 
 	 * @param pos	location to empty.
 	 */
-	public void emptyPos(int pos) {
-		setPos(pos, VACANT_POS);
+	public void emptyPos(Coordinate coordinate) {
+		setPos(coordinate, VACANT_POS);
 	}
-	
 	
 	/**
 	 * Set the position to occupied.
 	 * 
 	 * @param pos	location to fill.
 	 */
-	public void fillPos(int pos) {
-		setPos(pos, OCCUPIED_POS);
+	public void fillPos(Coordinate coordinate) {
+		setPos(coordinate, OCCUPIED_POS);
 	}
 	
 	/**
@@ -123,20 +135,54 @@ public abstract class GameBoard {
 	 * @param pos		relates to number of valid positions in gameBoard.
 	 * @param newType	new value for pos.
 	 */
-	private void setPos(int pos, int newType) {
+	private void setPos(Coordinate coordinate, int newType) {
+		int row = coordinate.getRow();
+		int col = coordinate.getCol();
+		
+		gameBoard[row][col] = newType;
+	}
+	
+	public Coordinate getCoordinate(int pos) {
 		int posCounter = 1;
 		
 		for (int row = 0; row < gameBoard.length; row++) {
 			for (int col = 0; col < gameBoard[row].length; col++) {
 				if (gameBoard[row][col] != INVALID_POS) {
 					if (posCounter == pos) {
-						gameBoard[row][col] = newType;
-						return;
+						return new Coordinate(row, col);
 					}
 					posCounter++;
 				}
 			}	
 		}
+		
+		// Postion not found.
+		return null;
+	}
+	
+	protected int getPos(Coordinate coordinate) {
+		int posCounter = 0;
+		int targetRow = coordinate.getRow();
+		int targetCol = coordinate.getCol();
+		
+		
+		for (int row = 0; row < gameBoard.length; row++) {
+			for (int col = 0; col < gameBoard[row].length; col++) {
+				if (gameBoard[row][col] != INVALID_POS) {
+					posCounter++;
+					
+					if (row == targetRow && col == targetCol) {
+						return posCounter;
+					}
+				}
+			}	
+		}
+		
+		return -1;
+	}
+	
+	public boolean isValid(Coordinate coordinate) {
+		return gameBoard[coordinate.getRow()][coordinate.getCol()] != INVALID_POS;
 	}
 	
 	/**
@@ -159,7 +205,12 @@ public abstract class GameBoard {
 		return posCounter;
 	}
 	
+	public static void drawHR() {
+		System.out.println("\n\n---\n");
+	}
+	
 	// Abstract Methods
-	public abstract boolean isValidMove(int initialPosition, int finalPosition);
+	public abstract Coordinate isValidMove(Coordinate initialCoordinate, Coordinate finalCoordinate);
 	public abstract void drawBoard();
+	public abstract void showHelp();
 }

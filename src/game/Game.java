@@ -1,11 +1,18 @@
 package game;
+import java.text.DecimalFormat;
 import java.util.Scanner;
 
+import other.Coordinate;
 import boards.EnglishBoard;
 import boards.GameBoard;
 import boards.TriangleBoard;
 
 public class Game {
+	
+	static int totalPegsLeft = 0;
+	static int gamesPlayed = 0;
+	static int gamesWon = 0;
+	
 	final String HELP = "h";
 	final String QUIT = "q";
 	
@@ -38,31 +45,43 @@ public class Game {
 			
 		} while(playing && board.getPegCount() > 1);
 		
-		// Game over
-		System.out.println("Game over");
-			    
-		// Provide win/loss feedback
-		if(board.getPegCount() == 1){
-		    System.out.println("You Win");
-		}else{
-			System.out.println("You LOSE");
-		}
+		
 	}
 	
 	// TODO Get user input and apply move or respond to command
 	private boolean getUserInput() {
 		Scanner keyboard = new Scanner(System.in); 
 		
-		System.out.println("Please enter a move or '" + HELP + "' for help.");
+		System.out.print("\nPlease enter a move or '" + HELP + "' for help: ");
 		
 		String input = keyboard.nextLine();
 		
 		try {
-			int move = Integer.parseInt(input);
-			if (board.isPeg(move)) {
-				// TODO valid position. Prompt for peg destination
-			}else {
-				// TODO alert invalid position.
+			boolean validMove = false;
+			int initialPosition = Integer.parseInt(input);
+			Coordinate initialCoordinate = board.getCoordinate(initialPosition);
+			
+			if ( initialCoordinate != null && board.isPeg(initialCoordinate) ) {
+		
+				System.out.print("Enter a final position: ");
+				int finalPosition = keyboard.nextInt();
+				Coordinate finalCoordinate = board.getCoordinate(finalPosition);
+				
+				Coordinate skipCoordinate = null;
+				
+				if (finalCoordinate != null) 
+					skipCoordinate = board.isValidMove(initialCoordinate, finalCoordinate);
+				
+				if ( skipCoordinate != null ) {
+					board.emptyPos(initialCoordinate);
+					board.emptyPos(skipCoordinate);
+					board.fillPos(finalCoordinate);
+					validMove = true;
+				}
+			}
+			
+			if ( ! validMove ){
+				System.out.println("Invalid move.");
 			}
 		} catch (NumberFormatException e) {
 			// Input is a command not a move
@@ -85,43 +104,80 @@ public class Game {
 	 * Prints helpful information to the console.
 	 */
 	private void printHelp(){
-		System.out.println("Helpful information");
+		board.showHelp();
+	}
+	
+	public void endGame() {
+		// Print final board
+		board.drawBoard();
+		
+		// Game over
+		System.out.println("\nGame over");
+			    
+		// Provide win/loss feedback
+		if(board.getPegCount() == 1){
+		    System.out.println("You Win");
+		    gamesWon++;
+		}else{
+			System.out.println("You LOSE");
+		}
+		
+		gamesPlayed++;
+		totalPegsLeft += board.getPegCount();
+		System.out.println("Remaining number of pegs: " + board.getPegCount());
+		displayStats();
+		
+		board.drawHR();
+	}
+	
+	public static void displayStats() {
+		// Test if user has played at all
+		if (gamesPlayed > 0) {
+			DecimalFormat formatter = new DecimalFormat("##0.00");
+			System.out.println("\nTotal pegs left this session: " + totalPegsLeft);
+			System.out.println("Win Rate: " + formatter.format((( (double) gamesWon / gamesPlayed ) * 100)) + "%");
+			System.out.println("Average Pegs Left: " + formatter.format( (double) totalPegsLeft / gamesPlayed));
+		}
 	}
 
 	public static void main(String[] args) {
 		final String TRIANGLE_GAME_ID = "1";
 		final String ENGLISH_GAME_ID = "2";
-		int numberOfPinsLeft;
 		boolean playing = true;
 		Scanner keyboard = new Scanner(System.in);
+		GameBoard board;
+		Game game;
 		
 		do {
-			// TODO choose game type
-			System.out.println("Select Game Board"); 
-	        System.out.print("Triangle Game (Press 1), English Game (Press 2): "); 
-	        
+			board = null;
+			
+			System.out.println("1) Triangle Peg");
+			System.out.println("2) English Peg Solitare");
+			System.out.println("Select a game or press 'q' to quit.");
 	        String input = keyboard.nextLine();
 	        
-	        try {
-				int selection = Integer.parseInt(input);
+	        // Check user input
+			if (input.equals(TRIANGLE_GAME_ID))
+				board = new TriangleBoard();
+			else if (input.equals(ENGLISH_GAME_ID))
+				board = new EnglishBoard();
+			else {
+				System.out.println("Do you wish to quit? Y/N");
+				input = keyboard.nextLine();
 				
-				GameBoard board;
-				
-				if (input.equals(TRIANGLE_GAME_ID))
-					board = new TriangleBoard();
-				else
-					board = new EnglishBoard();
-				
-				Game game = new Game(board);
-				game.play();
-				
-				// TODO get game stats
-				numberOfPinsLeft = board.getPegCount();
-				System.out.println("Remaining number of pegs: " + numberOfPinsLeft);
-				
-			} catch (NumberFormatException e) {
-				// TODO respond to non integer input. Could be mistake or intent to quit.
+				if ( input.equalsIgnoreCase("y") ) {
+					Game.displayStats();
+					System.out.println("Goodbye!");
+					return;
+				}
 			}
+	        
+			// Start game if board selected.
+	        if (board != null) {
+		        game = new Game(board);
+				game.play();
+				game.endGame();
+	        }
 	        
 		} while(playing);
 	}

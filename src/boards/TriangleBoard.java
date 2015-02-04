@@ -2,6 +2,8 @@ package boards;
 
 import java.util.Scanner;
 
+import other.Coordinate;
+
 public class TriangleBoard extends GameBoard{
 
 	public TriangleBoard() {
@@ -25,14 +27,16 @@ public class TriangleBoard extends GameBoard{
 			
 			drawBoard();
 			
-			System.out.println("Please select a position to empty:");
+			System.out.print("\nPlease select a position to empty: ");
 			
 			String input = keyboard.nextLine();
 			
 			try {
 				int position = Integer.parseInt(input);
-				if (0 < position && position <= countTotalPositions()) {
-					emptyPos(position);
+				Coordinate coordinate = getCoordinate(position);
+
+				if ( coordinate != null && isPeg(coordinate) ) {
+					emptyPos(coordinate);
 					return;
 				}
 			} catch (NumberFormatException e) {
@@ -42,11 +46,93 @@ public class TriangleBoard extends GameBoard{
 	}
 	
 	@Override
-	public boolean isValidMove(int initialPosition, int finalPosition) {
-		// TODO Auto-generated method stub
-		return false;
+	public Coordinate isValidMove(Coordinate initialCoordinate, Coordinate finalCoordinate) {
+		
+		// Initial tests
+		if ( isEmpty(initialCoordinate) )
+			return null;
+		
+		if ( isPeg(finalCoordinate) )
+			return null;
+		
+		// Primary Tests
+		Coordinate skipCoordinate;
+		
+		skipCoordinate = testHorizontal( initialCoordinate, finalCoordinate );
+		
+		if (skipCoordinate == null)
+			skipCoordinate = testDiagonal( initialCoordinate, finalCoordinate );
+		
+		return skipCoordinate;
 	}
-
+	
+	private Coordinate testHorizontal(Coordinate initialPos, Coordinate finalPos) {
+		if (initialPos.getRow() == finalPos.getRow()) {
+			Coordinate skipCoordinate = null;
+			
+			// Horizontal attempt
+			if(initialPos.getCol() - finalPos.getCol() == 2){
+				skipCoordinate = new Coordinate( initialPos.getRow(), initialPos.getCol() - 1 );
+			}else if(initialPos.getCol() - finalPos.getCol() == -2){
+				skipCoordinate = new Coordinate( initialPos.getRow(), initialPos.getCol() + 1 );
+			}
+			
+			if ( isPeg( skipCoordinate ) )
+				return skipCoordinate;
+			
+		}
+		return null;
+	}
+	
+	private Coordinate testDiagonal(Coordinate initialPos, Coordinate finalPos) {
+		Coordinate skipCoordinate;
+		
+		// Test /-diagonal
+		skipCoordinate = testVertical(initialPos, finalPos);
+		
+		if (skipCoordinate == null) {
+			// Test \-diagonal
+			skipCoordinate = testAltDiagonal(initialPos, finalPos);
+		}
+				
+		return skipCoordinate;
+	}
+	
+	private Coordinate testAltDiagonal(Coordinate initialPos, Coordinate finalPos) {
+		Coordinate skipCoordinate = null;
+		
+		if ( finalPos.equals(new Coordinate(initialPos.getRow() + 2, initialPos.getCol() + 2)) ){
+			skipCoordinate = new Coordinate(initialPos.getRow() + 1, initialPos.getCol() + 1);
+		}else if(finalPos.equals(new Coordinate(initialPos.getRow() - 2, initialPos.getCol() - 2))) {
+			skipCoordinate = new Coordinate(initialPos.getRow() - 1, initialPos.getCol() - 1);
+		}
+		
+		if ( isPeg( skipCoordinate ))
+			return skipCoordinate;
+		
+		return null;
+	}
+	
+	private Coordinate testVertical(Coordinate initialPos, Coordinate finalPos) {
+		if (initialPos.getCol() == finalPos.getCol()) {
+			Coordinate skipCoordinate = null;
+			
+			// Horizontal attempt
+			if ( initialPos.getRow() - finalPos.getRow() == 2 ){
+				skipCoordinate = new Coordinate( initialPos.getRow() - 1, initialPos.getCol() );
+			} else if ( initialPos.getRow() - finalPos.getRow() == -2 ){
+				skipCoordinate = new Coordinate( initialPos.getRow() + 1, initialPos.getCol() );
+			}
+			
+			if ( isPeg( skipCoordinate ) )
+				return skipCoordinate;
+			
+		}
+		
+		return null;
+	}
+	
+	
 	/**
 	 * drawBoard prints the game board in the console.
 	 * 
@@ -55,6 +141,8 @@ public class TriangleBoard extends GameBoard{
 	 */
 	@Override
 	public void drawBoard() {
+		drawHR();
+		
 		int holeCounter = 1;
 		
 		for (int row = 0; row < gameBoard.length; row++) {
@@ -83,5 +171,10 @@ public class TriangleBoard extends GameBoard{
 		for (int i = 0; i < offsetCount; i++) {
 			System.out.print(offset);
 		}
+	}
+
+	@Override
+	public void showHelp() {
+		System.out.println("SHOW HELP");
 	}
 }
