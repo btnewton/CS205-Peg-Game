@@ -43,7 +43,10 @@ public class Game {
 	public void play() {
 		boolean playing = true;
 		
+		printHelp();
+		
 		do {
+			GameBoard.drawHR();
 			// Print board
 			board.drawBoard();
 			
@@ -68,9 +71,9 @@ public class Game {
 	 * @author Brandt
 	 */
 	private boolean getUserInput() {
-		Scanner keyboard = new Scanner(System.in); 
 		
-		System.out.print("\nPlease enter a move or '" + HELP + "' for help: ");
+		Scanner keyboard = new Scanner(System.in); 
+		System.out.print("\nPlease enter a peg number to move or '" + HELP + "' for help: ");
 		
 		String input = keyboard.nextLine();
 		

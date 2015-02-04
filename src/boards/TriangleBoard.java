@@ -49,7 +49,7 @@ public class TriangleBoard extends GameBoard{
 					return;
 				}
 			} catch (NumberFormatException e) {
-				System.out.println("Invalid position.");
+				System.out.println("Invalid position. Please enter a number 1-15.");
 			}
 		}while(true);
 	}
@@ -216,7 +216,6 @@ public class TriangleBoard extends GameBoard{
 	 */
 	@Override
 	public void drawBoard() {
-		drawHR();
 		
 		int holeCounter = 1;
 		
@@ -255,8 +254,7 @@ public class TriangleBoard extends GameBoard{
 	 */
 	@Override
 	public void showHelp() {
-		System.out.println("SHOW HELP");
-		System.out.println("GAME COMMANDS AND RULES:");
+		System.out.println("\nGAME COMMANDS AND RULES:");
 		System.out.println("press q to quit.");
 		System.out.println("press h for help.");
 		System.out.println("press s for stats.");

@@ -126,7 +126,6 @@ public class EnglishBoard extends GameBoard{
 	 */
 	@Override
 	public void drawBoard() {
-		drawHR();
 		
 		int holeCounter = 1;
 		
@@ -147,7 +146,7 @@ public class EnglishBoard extends GameBoard{
 	 */
 	@Override
 	public void showHelp() {
-		System.out.println("GAME COMMANDS AND RULES:");
+		System.out.println("\nGAME COMMANDS AND RULES:");
 		System.out.println("press q to quit.");
 		System.out.println("press h for help.");
 		System.out.println("press s for stats.");
