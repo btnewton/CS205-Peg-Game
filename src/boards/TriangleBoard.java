@@ -121,6 +121,7 @@ public class TriangleBoard extends GameBoard{
 		System.out.println("to remove a peg, you must take select a peg, and move that peg over another into");
 		System.out.println("an empty space. Think jumping in checkers. Enter the coordinate of the peg you wish");
 		System.out.println("to move, and then the coordinate of the empty space you wish to move that peg into.");
+		System.out.println("Moves to an empty position can be made horizontally or diagonally.");
 		System.out.println("The game is over when there are no longer any moves the player can make, with the");
 		System.out.println("Player winning if there is only one peg remaining at this time.");
 	}
