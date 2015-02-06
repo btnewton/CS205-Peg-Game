@@ -1,10 +1,14 @@
 package boards;
 
+import java.util.ArrayList;
+
 import other.Coordinate;
+import tests.BoardTest;
 
 public abstract class GameBoard {
 	protected int[][] gameBoard;
-
+	protected ArrayList<BoardTest> tests = new ArrayList<>();
+	
 	// Text to print
 	protected final String INVALID_GFX;
 	protected final String VACANT_GFX;
@@ -258,8 +262,35 @@ public abstract class GameBoard {
 		System.out.println("\n\n---\n");
 	}
 	
-	// Abstract Methods
-	public abstract Coordinate isValidMove(Coordinate initialCoordinate, Coordinate finalCoordinate);
+	/**
+	 * Runs all BoardTests in the array list tests to check if the move is valid.
+	 * 
+	 * Each test implements the BoardTest interface and a test method. There is 1
+	 * BoardTest for each type of move (horizontal, vertical, etc.). This list
+	 * must be initialized during the child class constructor.
+	 * 
+	 * @param initialCoordinate	starting position of peg
+	 * @param finalCoordinate	final position of peg
+	 * @return					peg to be skipped if valid move
+	 */
+	public Coordinate isValidMove(Coordinate initialCoordinate, Coordinate finalCoordinate){
+		Coordinate skipCoordinate = null;
+		int counter = 0;
+		
+		while (skipCoordinate == null && counter < tests.size() ) {
+			
+			skipCoordinate = tests.get(counter).test( initialCoordinate, finalCoordinate );
+			
+			// Skip coordinate must be a peg
+			if ( skipCoordinate != null && !isPeg( skipCoordinate ) )
+				skipCoordinate = null;
+				
+			counter++;
+		}
+		
+		return skipCoordinate;
+	}
+	
 	public abstract void drawBoard();
 	public abstract void showHelp();
 }

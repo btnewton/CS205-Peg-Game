@@ -3,6 +3,10 @@ package boards;
 import java.util.Scanner;
 
 import other.Coordinate;
+import tests.AltDiagonalTest;
+import tests.BoardTest;
+import tests.HorizontalTest;
+import tests.VerticalTest;
 
 public class TriangleBoard extends GameBoard{
 
@@ -10,6 +14,7 @@ public class TriangleBoard extends GameBoard{
 	 * Initializes the Traingle GameBoard data structure.
 	 * 
 	 * @author Tylor
+	 * @author Brandt
 	 */
 	public TriangleBoard() {
 		gameBoard = new int[][] {
@@ -19,6 +24,11 @@ public class TriangleBoard extends GameBoard{
 				{2, 2, 2, 2, 0},
 				{2, 2, 2, 2, 2}
 				};
+
+		
+		tests.add( new VerticalTest() );
+		tests.add( new HorizontalTest() );
+		tests.add( new AltDiagonalTest() );
 
 		setStartingPosition();
 	}
@@ -53,157 +63,6 @@ public class TriangleBoard extends GameBoard{
 			}
 		}while(true);
 	}
-	
-	/**
-	 * Tests if a move is valid.
-	 * 
-	 * If the move is valid, the coordinate of the peg that was "skipped over"
-	 * is returned. If the move is invalid null is returned.
-	 * 
-	 * @param initialPos	Coordinate of peg to be moved.
-	 * @param finalPos		Coordinate to move peg.
-	 * @return				Coordinate of peg to be removed if valid.
-	 * 
-	 * @author Brandt
-	 */
-	@Override
-	public Coordinate isValidMove(Coordinate initialCoordinate, Coordinate finalCoordinate) {
-		
-		// Initial tests
-		if ( isEmpty(initialCoordinate) )
-			return null;
-		
-		if ( isPeg(finalCoordinate) )
-			return null;
-		
-		// Primary Tests
-		Coordinate skipCoordinate;
-		
-		skipCoordinate = testHorizontal( initialCoordinate, finalCoordinate );
-		
-		if (skipCoordinate == null)
-			skipCoordinate = testDiagonal( initialCoordinate, finalCoordinate );
-		
-		return skipCoordinate;
-	}
-	
-	/**
-	 * Tests if a move was horizontal.
-	 * 
-	 * If the move was horizontal and valid, the coordinate of the peg that was "skipped over"
-	 * is returned. If the move is invalid or not horizontal null is returned.
-	 * 
-	 * @param initialPos	Coordinate of peg to be moved.
-	 * @param finalPos		Coordinate to move peg.
-	 * @return				Coordinate of peg to be removed if valid.
-	 * 
-	 * @author Brandt
-	 */
-	private Coordinate testHorizontal(Coordinate initialPos, Coordinate finalPos) {
-		if (initialPos.getRow() == finalPos.getRow()) {
-			Coordinate skipCoordinate = null;
-			
-			// Horizontal attempt
-			if(initialPos.getCol() - finalPos.getCol() == 2){
-				skipCoordinate = new Coordinate( initialPos.getRow(), initialPos.getCol() - 1 );
-			}else if(initialPos.getCol() - finalPos.getCol() == -2){
-				skipCoordinate = new Coordinate( initialPos.getRow(), initialPos.getCol() + 1 );
-			}
-			
-			if ( isPeg( skipCoordinate ) )
-				return skipCoordinate;
-			
-		}
-		return null;
-	}
-	
-	/**
-	 * Runs both diagonal tests.
-	 * 
-	 * If the move was diagonal and valid, the coordinate of the peg that was "skipped over"
-	 * is returned. If the move is invalid or not diagonal null is returned.
-	 * 
-	 * @param initialPos	Coordinate of peg to be moved.
-	 * @param finalPos		Coordinate to move peg.
-	 * @return				Coordinate of peg to be removed if valid.
-	 * 
-	 * @author Brandt
-	 */
-	private Coordinate testDiagonal(Coordinate initialPos, Coordinate finalPos) {
-		Coordinate skipCoordinate;
-		
-		// Test /-diagonal
-		skipCoordinate = testVertical(initialPos, finalPos);
-		
-		if (skipCoordinate == null) {
-			// Test \-diagonal
-			skipCoordinate = testAltDiagonal(initialPos, finalPos);
-		}
-				
-		return skipCoordinate;
-	}
-	
-	/**
-	 * Tests if a move was diagonal (In the "\" direction).
-	 * 
-	 * If the move was diagonal and valid, the coordinate of the peg that was "skipped over"
-	 * is returned. If the move is invalid or not diagonal null is returned.
-	 * 
-	 * @param initialPos	Coordinate of peg to be moved.
-	 * @param finalPos		Coordinate to move peg.
-	 * @return				Coordinate of peg to be removed if valid.
-	 * 
-	 * @author Brandt
-	 */
-	private Coordinate testAltDiagonal(Coordinate initialPos, Coordinate finalPos) {
-		Coordinate skipCoordinate = null;
-		
-		if ( finalPos.equals(new Coordinate(initialPos.getRow() + 2, initialPos.getCol() + 2)) ){
-			skipCoordinate = new Coordinate(initialPos.getRow() + 1, initialPos.getCol() + 1);
-		}else if(finalPos.equals(new Coordinate(initialPos.getRow() - 2, initialPos.getCol() - 2))) {
-			skipCoordinate = new Coordinate(initialPos.getRow() - 1, initialPos.getCol() - 1);
-		}
-		
-		if ( isPeg( skipCoordinate ))
-			return skipCoordinate;
-		
-		return null;
-	}
-	
-	/**
-	 * Tests if a move was vertical.
-	 * 
-	 * If the move was vertical and valid, the coordinate of the peg that was "skipped over"
-	 * is returned. If the move is invalid or not vertical null is returned.
-	 * 
-	 * This serves as a diagonal test (in the "/" direction) with how the triangle data 
-	 * structure is implemented.
-	 * 
-	 * @param initialPos	Coordinate of peg to be moved.
-	 * @param finalPos		Coordinate to move peg.
-	 * @return				Coordinate of peg to be removed if valid.
-	 * 
-	 * @author Brandt
-	 */
-	private Coordinate testVertical(Coordinate initialPos, Coordinate finalPos) {
-		if (initialPos.getCol() == finalPos.getCol()) {
-			Coordinate skipCoordinate = null;
-			
-			// Horizontal attempt
-			if ( initialPos.getRow() - finalPos.getRow() == 2 ){
-				skipCoordinate = new Coordinate( initialPos.getRow() - 1, initialPos.getCol() );
-			} else if ( initialPos.getRow() - finalPos.getRow() == -2 ){
-				skipCoordinate = new Coordinate( initialPos.getRow() + 1, initialPos.getCol() );
-			}
-			
-			if ( isPeg( skipCoordinate ) )
-				return skipCoordinate;
-			
-		}
-		
-		return null;
-	}
-	
 	
 	/**
 	 * drawBoard prints the game board in the console.
